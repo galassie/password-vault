@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using Xunit;
@@ -7,13 +8,17 @@ using PasswordVault.Core.Exceptions;
 
 namespace PasswordVault.Tests
 {
-    public class VaultTest
+    public class VaultTest : IClassFixture<VaultTestFixture>
     {
         public static IEnumerable<object[]> GetVaults()
         {
             yield return new object[] 
             { 
                 new InMemoryVault() 
+            };
+            yield return new object[] 
+            { 
+                new FileSystemVault(VaultTestFixture.VAULT_PATH) 
             };
         }
 
@@ -48,6 +53,27 @@ namespace PasswordVault.Tests
             Assert.Equal(sign, record.Sign);
 
             Assert.Throws<TitleNotFoundException>(() => vault.Get("Title not present"));
+        }
+    }
+
+    public class VaultTestFixture : IDisposable 
+    {
+        public static readonly string VAULT_PATH = "store.vault";
+
+        public VaultTestFixture()
+        {
+            DeleteVaultIfExist();
+            File.Create(VAULT_PATH).Close();
+        }
+
+        public void Dispose()
+        {
+            DeleteVaultIfExist();
+        }
+
+        private void DeleteVaultIfExist() 
+        {
+            if (File.Exists(VAULT_PATH)) File.Delete(VAULT_PATH);
         }
     }
 }
