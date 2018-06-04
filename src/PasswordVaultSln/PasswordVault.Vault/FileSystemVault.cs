@@ -2,9 +2,10 @@ using System;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
+using PasswordVault.Core;
 using PasswordVault.Core.Exceptions;
 
-namespace PasswordVault.Core
+namespace PasswordVault.Vault
 {
     public class FileSystemVault : IVault
     {

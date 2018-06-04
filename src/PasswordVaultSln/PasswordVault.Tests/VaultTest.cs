@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Xunit;
 using PasswordVault.Core;
+using PasswordVault.Vault;
 using PasswordVault.Core.Exceptions;
 
 namespace PasswordVault.Tests

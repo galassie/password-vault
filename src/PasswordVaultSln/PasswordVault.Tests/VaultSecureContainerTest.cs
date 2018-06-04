@@ -3,8 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using Xunit;
 using PasswordVault.Core;
-using PasswordVault.Core.Exceptions;
+using PasswordVault.Vault;
 using PasswordVault.Cipher;
+using PasswordVault.Core.Exceptions;
 
 namespace PasswordVault.Tests
 {
