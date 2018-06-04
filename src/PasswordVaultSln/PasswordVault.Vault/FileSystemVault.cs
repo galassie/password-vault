@@ -9,13 +9,14 @@ namespace PasswordVault.Vault
 {
     public class FileSystemVault : IVault
     {
-        private string path;
+        public string VaultLocation { get; private set; }
         private char separator = '@';
 
-        public FileSystemVault(string path)
+        public FileSystemVault(string directory, string file)
         {
-            if (!File.Exists(path)) File.Create(path).Close();
-            this.path = path;    
+            if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+            VaultLocation = Path.Combine(directory, file);   
+            if (!File.Exists(VaultLocation)) File.Create(VaultLocation).Close();
         }
 
         public VaultRecord Get(string title)
@@ -30,7 +31,7 @@ namespace PasswordVault.Vault
         {
             var result = new List<string>();
 
-            using (var sr = File.OpenText(path)) 
+            using (var sr = File.OpenText(VaultLocation)) 
             {
                 string line;
                 while ((line = sr.ReadLine()) != null)
@@ -49,7 +50,7 @@ namespace PasswordVault.Vault
             var result = RetrieveVaultRecord(record.Title);
             if (result != null) throw new TitleAlreadyPresentException(record.Title);
 
-            using (var sw = File.AppendText(path))
+            using (var sw = File.AppendText(VaultLocation))
             {
                 sw.WriteLine($"{record.Title}@{record.CipherPassword}@{record.Sign}");
             }
@@ -57,7 +58,7 @@ namespace PasswordVault.Vault
 
         private VaultRecord RetrieveVaultRecord(string title) 
         {
-            using (var sr = File.OpenText(path)) 
+            using (var sr = File.OpenText(VaultLocation))
             {
                 string line;
                 while ((line = sr.ReadLine()) != null)

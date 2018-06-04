@@ -19,7 +19,7 @@ namespace PasswordVault.Tests
             };
             yield return new object[] 
             { 
-                new FileSystemVault(VaultTestFixture.VAULT_PATH) 
+                new FileSystemVault(VaultTestFixture.PATH, VaultTestFixture.FILE_NAME) 
             };
         }
 
@@ -59,22 +59,26 @@ namespace PasswordVault.Tests
 
     public class VaultTestFixture : IDisposable 
     {
-        public static readonly string VAULT_PATH = "store.vault";
+        public static readonly string PATH = ".";
+
+        public static readonly string FILE_NAME = "store.vault";
 
         public VaultTestFixture()
         {
-            DeleteVaultIfExist();
-            File.Create(VAULT_PATH).Close();
+            var vaultPath = Path.Combine(PATH, FILE_NAME);
+            DeleteVaultIfExist(vaultPath);
+            File.Create(vaultPath).Close();
         }
 
         public void Dispose()
         {
-            DeleteVaultIfExist();
+            var vaultPath = Path.Combine(PATH, FILE_NAME);
+            DeleteVaultIfExist(vaultPath);
         }
 
-        private void DeleteVaultIfExist() 
+        private void DeleteVaultIfExist(string vaultPath)
         {
-            if (File.Exists(VAULT_PATH)) File.Delete(VAULT_PATH);
+            if (File.Exists(vaultPath)) File.Delete(vaultPath);
         }
     }
 }
