@@ -59,7 +59,7 @@ namespace PasswordVault.ConsoleApp
                     result =  () => Console.WriteLine(container.GetPassword(args[0], args[1]));
                     break;
                 case "remove":
-                    result =  () => Console.WriteLine("Still empty!");
+                    result =  () => container.RemoveTitle(args[0], args[1]);
                     break;
                 default: 
                     result = () => Console.WriteLine("Command not recognized!");

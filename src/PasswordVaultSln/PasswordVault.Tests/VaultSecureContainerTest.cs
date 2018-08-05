@@ -67,7 +67,6 @@ namespace PasswordVault.Tests
         [Fact]
         public void ThrowInvalidSuperPasswordExceptionWhenSuperPasswordIsWrong()
         {
-            
             var vault = new InMemoryVault();
             var cipher = new SimpleStringCipher();
             var container = new VaultSecureContainer(vault, cipher);
@@ -78,6 +77,26 @@ namespace PasswordVault.Tests
             container.Store(title, password, superPassword);
 
             Assert.Throws<InvalidSuperPasswordException>(() => container.GetPassword(title, "wrong"));         
+        }
+
+        [Fact]
+        public void RemoveTitleShouldRemoveRecordFromVaultIfPassowrdIsCorrect() 
+        {
+            var vault = new InMemoryVault();
+            var cipher = new SimpleStringCipher();
+            var container = new VaultSecureContainer(vault, cipher);
+
+            var title = "Twitter";
+            var password = "password";
+            var superPassword = "1234567890";
+            container.Store(title, password, superPassword);
+
+            Assert.True(container.GetTitles().Count() == 1);
+
+            Assert.Throws<InvalidSuperPasswordException>(() => container.RemoveTitle(title, "wrong"));
+
+            container.RemoveTitle(title, superPassword);
+            Assert.True(container.GetTitles().Count() == 0);
         }
     }
 }

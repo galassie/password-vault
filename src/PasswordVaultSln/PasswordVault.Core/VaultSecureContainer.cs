@@ -45,5 +45,14 @@ namespace PasswordVault.Core
 
             return cipher.Decrypt(record.CipherPassword, superPassword);
         }
+
+        public void RemoveTitle(string title, string superPassword)
+        {
+            var record = vault.Get(title);
+            var sign = cipher.CalculateHash(superPassword);
+
+            if(record.Sign != sign) throw new InvalidSuperPasswordException();
+            vault.Remove(title);
+        }
     }
 }
