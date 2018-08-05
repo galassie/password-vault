@@ -58,6 +58,9 @@ namespace PasswordVault.ConsoleApp
                 case "read":
                     result =  () => Console.WriteLine(container.GetPassword(args[0], args[1]));
                     break;
+                case "remove":
+                    result =  () => Console.WriteLine("Still empty!");
+                    break;
                 default: 
                     result = () => Console.WriteLine("Command not recognized!");
                     break;
