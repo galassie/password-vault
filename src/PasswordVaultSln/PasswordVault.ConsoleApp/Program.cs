@@ -32,7 +32,7 @@ namespace PasswordVault.ConsoleApp
 
         static VaultSecureContainer ConfigureContainer() 
         {
-            var vault = new FileSystemVault("C:\\Temp", "store.vault");
+            var vault = new FileSystemVault(".", "store.vault");
             var cipher = new AesCipher();
 
             return new VaultSecureContainer(vault, cipher);
@@ -40,26 +40,42 @@ namespace PasswordVault.ConsoleApp
         
         static Action GetCommand(VaultSecureContainer container, string commandText, params string[] args)
         {
+            Action result;
             switch (commandText) 
             {
                 case "store": 
-                    return () => container.Store(args[0], args[1], args[2]);
-                
+                    result = () => container.Store(args[0], args[1], args[2]);
+                    break;
                 case "titles": 
-                    return () => 
+                    result = () => 
                     {
                         foreach (var title in container.GetTitles())
                         {
                             Console.WriteLine(title);
                         }
                     };
-                
+                    break;
                 case "read":
-                    return () => Console.WriteLine(container.GetPassword(args[0], args[1]));
-
+                    result =  () => Console.WriteLine(container.GetPassword(args[0], args[1]));
+                    break;
                 default: 
-                    return () => Console.WriteLine("Command not recognized!");
+                    result = () => Console.WriteLine("Command not recognized!");
+                    break;
             }
+
+            return CreateCommandContainer(result);
+        }
+
+        static Action CreateCommandContainer(Action command) 
+        {
+            return () => {
+                try {
+                    command();
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
+            };
         }
     }
 }
