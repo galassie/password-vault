@@ -6,7 +6,8 @@ namespace PasswordVault.Core
     public interface IVault
     {
         IEnumerable<string> GetTitles(); 
-        VaultRecord Get(string title);
+        VaultRecord Get(string title); 
         void Store(VaultRecord record);
+        bool Remove(string title);
     }
 }

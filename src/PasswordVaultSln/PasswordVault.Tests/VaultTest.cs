@@ -54,6 +54,12 @@ namespace PasswordVault.Tests
             Assert.Equal(sign, record.Sign);
 
             Assert.Throws<TitleNotFoundException>(() => vault.Get("Title not present"));
+
+            var resultRemove = vault.Remove(title);
+            titles = vault.GetTitles();
+            
+            Assert.True(resultRemove);
+            Assert.True(titles.Count() == 0);
         }
     }
 

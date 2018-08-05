@@ -75,5 +75,30 @@ namespace PasswordVault.Vault
             }
             return null;
         }
+
+        public bool Remove(string title)
+        {
+            var result = false;
+            var tempFile = Path.GetTempFileName();
+
+            using(var sr = new StreamReader(VaultLocation))
+            using(var sw = new StreamWriter(tempFile))
+            {
+                string line;
+
+                while((line = sr.ReadLine()) != null)
+                {
+                    if(line.StartsWith($"{title}@")) result = true;
+                    else sw.WriteLine(line);
+                }
+            }
+
+            if (!result) File.Delete(tempFile);
+            else {
+                File.Delete(VaultLocation);
+                File.Move(tempFile, VaultLocation);
+            }
+            return result;
+        }
     }
 }

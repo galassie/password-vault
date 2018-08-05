@@ -31,5 +31,10 @@ namespace PasswordVault.Vault
             if(vault.ContainsKey(record.Title)) throw new TitleAlreadyPresentException(record.Title);
             vault.Add(record.Title, record);
         }
+
+        public bool Remove(string title)
+        {
+            return vault.Remove(title);
+        }
     }
 }
